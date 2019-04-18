@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title%}
+    用户详情--{{ user.nickname }}
+{% endblock%}
+
+
+{% block right%}
+<div class="col-md-9">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title"> 用户详情--{{ user.nickname }}</h2>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-bordered table-striped">
+                <tr>
+                    <td>用户名称</td>
+                    <td>{{ user.username }}</td>
+                </tr>
+                <tr>
+                    <td>用户头像</td>
+                    <td><img src="{{ user.avatar }}" alt=""></td>
+                </tr>
+                <tr>
+                    <td>用户昵称</td>
+                    <td>{{ user.nickname }}</td>
+                </tr>
+                <tr>
+                    <td>用户性别</td>
+                    <td>{{ user.gender }}</td>
+                </tr>
+                <tr>
+                    <td>用户年龄</td>
+                    <td>{{user.age}}</td>
+                </tr>
+                <tr>
+                    <td>用户生日</td>
+                    <td>{{user.birthday}}</td>
+                </tr>
+                <tr>
+                    <td>最后登录时间</td>
+                    <td>{% firstof  user.last_login  '无' %}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock%}

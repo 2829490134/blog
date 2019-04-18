@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title%}
+    文章列表
+{% endblock%}
+
+
+{% block right%}
+<div class="col-md-9">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">文章列表</h2>
+        </div>
+        <div class="panel-body">
+            <h3>{{msg}}</h3>
+            <table class="table table-hover table-bordered table-striped">
+                <tr>
+                    <td>文章标识</td>
+                    <td>文章标题</td>
+                    <td>文章内容</td>
+                    <td>点击量</td>
+                    <td>作者</td>
+                    <td>操作</td>
+                </tr>
+                {% for at in articles %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'blog:article_detail' at.id %}">{{ at.title | truncatechars:15 }}</a></td>
+                    <td><a href="{% url 'blog:article_detail' at.id %}">{{ at.content | truncatechars:15 }}</a></td>
+                    <td>{{ at.count }}</td>
+                    <td><a href="{% url 'blog:show' at.author.id %}">{{ at.author.nickname }}</a></td>
+                    <td>
+                        <a onclick="return window.confirm('您确定要删除该这篇文章吗？');" href="{% url 'blog:article_delete' at.id %}" class="btn btn-danger">删除</a>
+                        <!--<a class="btn btn-danger" onclick="delete_at({{at.id}}, this)">删除</a>-->
+                        <a href="{% url 'blog:article_update' at.id %}" class="btn btn-warning" >修改</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">对不起，当前没有用户， <a href="{% url 'blog:reg' %}">请注册</a></td>
+                </tr>
+                {% endfor%}
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function delete_at(id, node) {
+        let flag = window.confirm("您确定要删除该用户吗？");
+        if (flag) {
+            $.ajax({
+                url: "/blog/article_delete/"+id,
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                       // window.location.reload()
+                       //  $(node).parents("tr").remove();
+                       //  window.location.href = window.location.href.replace("article_list", "login")
+                       //  window.location.pathname = "/blog/login"
+                    } else {
+                        alert("删除失败");
+                    }
+                }
+            })
+        }
+    }
+</script>
+
+{% endblock%}

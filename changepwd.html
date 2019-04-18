@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title%}
+    安全中心
+{% endblock%}
+
+
+{% block right%}
+<div class="col-md-9">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">修改密码</h2>
+        </div>
+        <div class="panel-body">
+            <h4>{{msg}}</h4>
+            <form action="{% url 'blog:changepwd' %}" method="post">
+                {% csrf_token %}
+                <table class="table table-hover table-bordered table-striped">
+                    <tr>
+                        <td>请输入原有密码：</td>
+                        <td><input class="form-control" type="password" name="oldpwd"></td>
+                    </tr>
+                    <tr>
+                        <td>请输入新的密码：</td>
+                        <td><input class="form-control" type="password" name="newpwd"></td>
+                    </tr>
+                    <tr>
+                        <td>请再次确认新的密码:</td>
+                        <td><input class="form-control" type="password" name="confirmpwd"></td>
+                    </tr>
+                     <tr>
+                        <td colspan="2" class="text-center">
+                            <input type="submit" class="btn btn-danger" value="修改密码">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock%}

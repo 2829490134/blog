@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title%}
+    文章添加
+{% endblock%}
+
+
+{% block right%}
+<script type="text/javascript" src="/static/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="/static/django_tinymce/init_tinymce.js"></script>
+
+<!--<link rel="stylesheet" href="/static/ueditor/themes/default/css/ueditor.css">-->
+<!--<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>-->
+<!--<script type="text/javascript" src="/static/ueditor/ueditor.all.min.js"></script>-->
+<!--<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>-->
+
+
+<div class="col-md-9">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">发表文章</h2>
+        </div>
+        <div class="panel-body">
+            <h4>{{msg}}</h4>
+            <form action="{% url 'blog:article_add' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <input type="text" name="title" id="title" class="col-md-12 form-control" placeholder="文章标题">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-10 col-md-offset-1">
+
+                        <textarea name="content" id="content" class="col-md-12 form-control" rows="20" ></textarea>
+                        <!--<script id="content" name="content" ></script>-->
+                    </div>
+                </div>
+                <div class="row text-center"style="margin-top: 10px;">
+                    <button class="btn btn-success btn-lg submit">添加文章</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+     tinyMCE.init({
+         "mode": 'textareas',
+         'theme': 'simple',
+        'theme': "advanced",
+        'width': 670,
+        'height': 400,
+     });
+
+
+
+    <!--let id_content = UE.getEditor('content',{-->
+         <!--'initialFrameWidth': 600,-->
+        <!--'initialFrameHeight': 300,-->
+         <!--'serverUrl': '/ueditor/controller/?imagePathFormat=&filePathFormat='-->
+     <!--});-->
+
+
+    $(function () {
+         $(".submit").click(function () {
+            let $title = $("#title").val();
+            let $content = id_content.getContent();
+
+            // 数据校验
+             if ($title.trim() == "") {
+                 alert("标题不能为空！")
+                 return;
+             }
+             if ($content.trim() == "") {
+                alert("内容不能为空！")
+                 return;
+             }
+
+             $.post("/blog/article_add/", {"title": $title, "content": $content, "csrfmiddlewaretoken": "{{ csrf_token }}"}, function (data) {
+                 if (data.success) {
+                     alert("文章添加成功")
+                     $("#title").val("");
+                     id_content.setContent("");
+                 } else {
+                     alert("文章添加失败，请重新添加")
+                 }
+             }, "json")
+
+
+        })
+    });
+
+
+
+</script>
+
+{% endblock%}
